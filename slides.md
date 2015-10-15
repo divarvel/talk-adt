@@ -1,60 +1,183 @@
-# Type de données algébriques
+% Algebraic Data Types for fun and profit
+% Clément Delafargue
+% 2015-10-16
 
-# Type
+# I'm online!
 
-# de Données
+ - [\@clementd](https://twitter.com/clementd) on twitter
+ - [cltdl.fr/blog](http://cltdl.fr/blog)
+ - [clever cloud](http://clever-cloud.com)
 
-# Algébrique
-
---------------------------------------------------------------------------------
-
-    class DnsRecord {
-        String recordType;
-        String domainName;
-        String cnameAlias;
-        IpAddr recordIp;
-        int ttl;
-    }
 
 --------------------------------------------------------------------------------
 
-    if(record.recordType.equals("CNAME")) {
-        record.cnameAlias; // should not be null
-    } else if(record.recordType.equals("A")) {
-        record.recordIp; // should not be null
-    } else {
-        // ???
-    }
+<div class="yolo" style="background-color:#54CC14">
 
-# Implicit subset of fields
+### Algebraic Data Types for fun and profit
 
-# Exhaustivity check
+</div>
 
-# Sum and Products
+--------------------------------------------------------------------------------
 
-# Product type
+<div class="yolo" style="background-color:#CC4A14">
 
-    a * b
-    (Bool * Bool) // 2 * 2 = 4
+## Algebraic
+
+</div>
+
+--------------------------------------------------------------------------------
+
+<div class="yolo" style="background-color: #99583D">
+
+## Data
+
+</div>
+
+--------------------------------------------------------------------------------
+
+<div class="yolo" style="background-color: #FF0000">
+
+## Type
+
+</div>
+
+--------------------------------------------------------------------------------
+
+```java
+class DnsRecord {
+    String recordType;
+    String domainName;
+    String cnameAlias;
+    IpAddr recordIp;
+    int ttl;
+}
+```
+
+--------------------------------------------------------------------------------
+
+```java
+if(record.recordType.equals("CNAME")) {
+    // should not be null
+    record.cnameAlias;
+} else if(record.recordType.equals("A")) {
+    // should not be null
+    record.recordIp;
+} else {
+    // ???
+}
+```
+
+--------------------------------------------------------------------------------
+
+## Implicit subset of fields
+
+--------------------------------------------------------------------------------
+
+## No Exhaustivity check
+
+--------------------------------------------------------------------------------
+
+```java
+switch() {
+  //...
+  case default:
+    throw new RuntimeException(
+      "This should not happen lol"
+    );
+}
+```
+--------------------------------------------------------------------------------
+
+![](./assets/whatever.jpg)
+
+--------------------------------------------------------------------------------
+
+## Sum and Products
+
+--------------------------------------------------------------------------------
+
+## Product type
+
+--------------------------------------------------------------------------------
+
+## Tuple?
+
+--------------------------------------------------------------------------------
+
+## Record?
+
+--------------------------------------------------------------------------------
+
+## Oh, right.
+
+--------------------------------------------------------------------------------
+
+<div class="yolo" style="background-color:#99583D">
+
+## POJO
+
+</div>
+
+--------------------------------------------------------------------------------
+
+## `a * b`
+
+--------------------------------------------------------------------------------
+
+## `(Bool * Bool)`
+
+--------------------------------------------------------------------------------
+
+<div class="yolo" style="background-color:#CC4A14">
+
+## `2 * 2 = 4`
+
+</div>
+
+--------------------------------------------------------------------------------
+
+## Sum type
+
+--------------------------------------------------------------------------------
+
+## Enum
+
+--------------------------------------------------------------------------------
+
+# `Pending | Accepted | Rejected`
+
+--------------------------------------------------------------------------------
 
 # Sum type
 
-# Enum
+--------------------------------------------------------------------------------
 
-    Pending | Accepted | Rejected
+## `Status + Bool`
 
-# Sum type
+--------------------------------------------------------------------------------
 
-    Status + Bool // 3 + 2 = 5
+<div class="yolo" style="background-color:#CC4A14">
 
-# Sum type
+## `3 + 2 = 5`
+
+</div>
+
+--------------------------------------------------------------------------------
+
+## Sum type
+
+--------------------------------------------------------------------------------
 
       CnameRecord ( ttl, name, alias )
     | ARecord     ( ttl, name, ipv4 address )
     | AaaaRecord  ( ttl, name, ipv6 address )
     | TxtRecord   ( ttl, name, value )
 
-# Algebraic data type
+--------------------------------------------------------------------------------
+
+## Let's factor it out
+
+--------------------------------------------------------------------------------
 
     DnsRecord( ttl, name,
         AValue(ipv4)
@@ -62,34 +185,74 @@
       | CnameValue(alias)
       | TxtValue(name)
 
-# Distributivity
+--------------------------------------------------------------------------------
 
-    (a * b + a * c) <=> a * (b + c)
+## Distributivity
 
-# Commutativity
+--------------------------------------------------------------------------------
 
-    (a * b) <=> (b * a)
-    (a + b) <=> (b + a)
+<p style="text-align: center; margin-top: 200px;">
+`(a * b + a * c)`<br>
+`<=>`<br>
+`a * (b + c)`
+</p>
 
-# Identities
+--------------------------------------------------------------------------------
 
-    a * 1 <=> a
-    a + 0 <=> a
+## Commutativity
 
-# Unit type
+--------------------------------------------------------------------------------
 
-    ()
+<p style="text-align: center; margin-top: 200px;">
+`(a * b) <=> (b * a)`<br>
+`(a + b) <=> (b + a)`
+</p>
 
-# Void type
+--------------------------------------------------------------------------------
 
-    Void
+## Identities
 
-# Associativity
+--------------------------------------------------------------------------------
 
-    (a + b) + c <=> a + (b + c)
-    (a * b) * c <=> a * (b * c)
+## Associativity
 
-# Functions
+--------------------------------------------------------------------------------
 
-    A -> B
-    b ^ a
+# Haskell
+
+```haskell
+
+data DnsRecord =
+    CnameRecord Int String String
+  | ARecord Int String IpV4
+  | AaaaRecord Int String IpV6
+  | TxtRecord Int String String
+```
+
+--------------------------------------------------------------------------------
+
+# Scala
+
+```scala
+sealed trait DnsRecord
+case class CnameRecord(...)
+  extends DnsRecord
+case class ARecord(...)
+  extends DnsRecord
+case class AaaaRecord(...)
+  extends DnsRecord
+case class TxtRecord(...)
+  extends DnsRecord
+```
+
+--------------------------------------------------------------------------------
+
+# Javascript
+
+```javascript
+var adt = require('adt');
+var DnsRecord = adt.data({
+  CnameRecord: { ttl: adt.only(Number), ... },
+  ARecord: { ttl: adt.only(Number), ... }
+});
+```
