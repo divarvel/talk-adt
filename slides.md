@@ -73,6 +73,10 @@ if(record.recordType.equals("CNAME")) {
 
 --------------------------------------------------------------------------------
 
+<video src="/home/clement/Images/lol/eagles.webm" loop></video>
+
+--------------------------------------------------------------------------------
+
 ## No Exhaustivity check
 
 --------------------------------------------------------------------------------
@@ -97,6 +101,10 @@ switch() {
 --------------------------------------------------------------------------------
 
 ## Product type
+
+--------------------------------------------------------------------------------
+
+<video src="/home/clement/Images/lol/cat-bunny.webm" loop></video>
 
 --------------------------------------------------------------------------------
 
@@ -144,11 +152,16 @@ switch() {
 
 --------------------------------------------------------------------------------
 
+<video src="/home/clement/Images/lol/cats.webm" loop></video>
+
+--------------------------------------------------------------------------------
+
+
 # `Pending | Accepted | Rejected`
 
 --------------------------------------------------------------------------------
 
-# Sum type
+## Sum type
 
 --------------------------------------------------------------------------------
 
@@ -172,6 +185,48 @@ switch() {
     | ARecord     ( ttl, name, ipv4 address )
     | AaaaRecord  ( ttl, name, ipv6 address )
     | TxtRecord   ( ttl, name, value )
+
+--------------------------------------------------------------------------------
+
+# Haskell
+
+```haskell
+
+data DnsRecord =
+    CnameRecord Int String String
+  | ARecord Int String IpV4
+  | AaaaRecord Int String IpV6
+  | TxtRecord Int String String
+```
+
+--------------------------------------------------------------------------------
+
+# Scala
+
+```scala
+sealed trait DnsRecord
+case class CnameRecord(...)
+  extends DnsRecord
+case class ARecord(...)
+  extends DnsRecord
+case class AaaaRecord(...)
+  extends DnsRecord
+case class TxtRecord(...)
+  extends DnsRecord
+```
+
+--------------------------------------------------------------------------------
+
+# Javascript
+
+```javascript
+var adt = require('adt');
+var DnsRecord = adt.data({
+  CnameRecord: { ttl: adt.only(Number), ... },
+  ARecord: { ttl: adt.only(Number), ... },
+  AaaaRecord: { ttl: adt.only(Number), ... }
+});
+```
 
 --------------------------------------------------------------------------------
 
@@ -214,45 +269,90 @@ switch() {
 
 --------------------------------------------------------------------------------
 
+<p style="text-align: center; margin-top: 200px;">
+`(a * 1) <=> a`<br>
+`(a + 0) <=> a`
+</p>
+
+--------------------------------------------------------------------------------
+
+## Unit type
+
+--------------------------------------------------------------------------------
+
 ## Associativity
 
 --------------------------------------------------------------------------------
 
-# Haskell
-
-```haskell
-
-data DnsRecord =
-    CnameRecord Int String String
-  | ARecord Int String IpV4
-  | AaaaRecord Int String IpV6
-  | TxtRecord Int String String
-```
+<p style="text-align: center; margin-top: 200px;">
+`(a + b) + c <=> a + (b + c)`<br>
+`(a * b) * c <=> a * (b * c)`<br>
+</p>
 
 --------------------------------------------------------------------------------
 
-# Scala
-
-```scala
-sealed trait DnsRecord
-case class CnameRecord(...)
-  extends DnsRecord
-case class ARecord(...)
-  extends DnsRecord
-case class AaaaRecord(...)
-  extends DnsRecord
-case class TxtRecord(...)
-  extends DnsRecord
-```
+## Functions
 
 --------------------------------------------------------------------------------
 
-# Javascript
+## `a -> b`
 
-```javascript
-var adt = require('adt');
-var DnsRecord = adt.data({
-  CnameRecord: { ttl: adt.only(Number), ... },
-  ARecord: { ttl: adt.only(Number), ... }
-});
-```
+--------------------------------------------------------------------------------
+
+## `b`<sup>`a`</sup>
+
+--------------------------------------------------------------------------------
+
+## `c`<sup>`(a * b)`</sup>
+
+--------------------------------------------------------------------------------
+
+## (`c`<sup>`b`</sup>)<sup>`a`</sup>
+
+--------------------------------------------------------------------------------
+
+## `(a, b) -> c`
+
+--------------------------------------------------------------------------------
+
+## `a -> b -> c`
+
+--------------------------------------------------------------------------------
+
+## #Currying
+
+--------------------------------------------------------------------------------
+
+## Do your homework
+
+--------------------------------------------------------------------------------
+
+## #intuition
+
+--------------------------------------------------------------------------------
+
+
+## Thanks
+
+--------------------------------------------------------------------------------
+
+<video src="/home/clement/Images/lol/big_internet_hug.webm" loop></video>
+
+-------------------------------------------
+
+# devoxxroxx
+
+-------------------------------------------
+
+# Thanks
+
+## <http://cltdl.fr/gifs>
+
+-------------------------------------------
+
+# I'm online!
+
+- [\@clementd](https://twitter.com/clementd) on twitter
+- [cltdl.fr/blog](http://cltdl.fr/blog)
+- [clever cloud](http://clever-cloud.com)
+
