@@ -1,31 +1,46 @@
-% Algebraic Data Types for fun and profit
-% Clément Delafargue
-% 2015-10-16
+---
+title: "Algebraic Data Types for fun and profit"
+overlay: "clementd"
+author:
+  name: Clément Delafargue
+  desc:
+    - Software developer at <a href="https://outscale.com">3DS Outscale</a>
+    - <a href="https://framapiaf.org/clementd">@clementd@framapiaf.org</a>
+---
 
-# I'm online!
+# Algebraic Data Types for fun and profit
 
- - [\@clementd](https://twitter.com/clementd) on twitter
- - [cltdl.fr/blog](http://cltdl.fr/blog)
- - [clever cloud](http://clever-cloud.com)
+---
 
+# Algebraic
 
---------------------------------------------------------------------------------
+---
 
-### Algebraic Data Types for fun and profit
+# Data
 
---------------------------------------------------------------------------------
+---
 
-## Algebraic
+# Type
 
---------------------------------------------------------------------------------
+---
 
-## Data
+:::bigimage
+![](./assets/bretons-fous.jpg)
+:::
 
---------------------------------------------------------------------------------
+---
 
-## Type
+# Type
 
---------------------------------------------------------------------------------
+---
+
+# de données
+
+---
+
+# algébrique
+
+---
 
 ```java
 class DnsRecord {
@@ -37,7 +52,7 @@ class DnsRecord {
 }
 ```
 
---------------------------------------------------------------------------------
+---
 
 ```java
 if(record.recordType.equals("CNAME")) {
@@ -51,19 +66,15 @@ if(record.recordType.equals("CNAME")) {
 }
 ```
 
---------------------------------------------------------------------------------
+---
 
-## Implicit subset of fields
+# Implicit subset of fields
 
---------------------------------------------------------------------------------
+---
 
-<video src="/home/clement/Images/lol/eagles.webm" loop></video>
+# No Exhaustivity check
 
---------------------------------------------------------------------------------
-
-## No Exhaustivity check
-
---------------------------------------------------------------------------------
+---
 
 ```java
 switch() {
@@ -74,95 +85,127 @@ switch() {
     );
 }
 ```
---------------------------------------------------------------------------------
 
-![](./assets/whatever.jpg)
+---
 
---------------------------------------------------------------------------------
+# How can we make it better?
 
-## Sum and Products
+---
 
---------------------------------------------------------------------------------
+# Sum and Products
 
-## Product type
+:::notes
+| That's the meaning of algebraic
+:::
 
---------------------------------------------------------------------------------
+---
 
-<video src="/home/clement/Images/lol/cat-bunny.webm" loop></video>
+# Product type
 
---------------------------------------------------------------------------------
+---
 
-## Tuple?
+# Tuple?
 
---------------------------------------------------------------------------------
+---
 
-## Record?
+# Record?
 
---------------------------------------------------------------------------------
+---
 
-## Oh, right.
+# Structure?
 
---------------------------------------------------------------------------------
+---
 
-<div class="yolo" style="background-color:#99583D">
+# Oh, right.
 
-## POJO
+---
 
-</div>
+# POJO []{.make-alternate}
 
---------------------------------------------------------------------------------
+---
 
-## `a * b`
+:::bigimage
+![](./assets/inquisition.jpg)
+:::
 
---------------------------------------------------------------------------------
+---
 
-## `(Bool * Bool)`
+# Cardinality
 
---------------------------------------------------------------------------------
+:::notes
+| as in "number of elements in a set"
+| which assumes we view types as sets
+| a way to gain intution, it does not hold all the way, since types can be infinite
+:::
 
-## `2 * 2 = 4`
+---
 
---------------------------------------------------------------------------------
+# `a * b`
 
-## Sum type
+---
 
---------------------------------------------------------------------------------
+# `(Bool * Bool)`
 
-## Enum
+---
 
---------------------------------------------------------------------------------
+# `2 * 2 = 4`
 
-<video src="/home/clement/Images/lol/cats.webm" loop></video>
+---
 
---------------------------------------------------------------------------------
+# Sum type
 
+---
 
-# `Pending | Accepted | Rejected`
+# Enum
 
---------------------------------------------------------------------------------
+---
 
-## Sum type
+```
+  NS |
+  A |
+  AAAA |
+  CNAME |
+  MX |
+  TXT |
+  SRV |
+  SOA |
+  PTR |
+  CERT
+```
 
---------------------------------------------------------------------------------
+:::notes
+| do not confuse AAA (batteries)
+| AAAA (ipv6 address record)
+| AAAAA (andouillette)
+:::
 
-## `Status + Bool`
+---
 
---------------------------------------------------------------------------------
+# Sum type
 
-## `3 + 2 = 5`
+---
 
---------------------------------------------------------------------------------
+# `RecordType + Bool`
 
-## Sum type
+---
 
---------------------------------------------------------------------------------
+# `10 + 2 = 12`
 
+---
+
+# Sum type
+
+---
+
+```
       CnameRecord ( ttl, name, alias )
     | ARecord     ( ttl, name, ipv4 address )
     | AaaaRecord  ( ttl, name, ipv6 address )
     | TxtRecord   ( ttl, name, value )
+    | ...
+```
 
---------------------------------------------------------------------------------
+---
 
 # Haskell
 
@@ -173,160 +216,159 @@ data DnsRecord =
   | ARecord Int String IpV4
   | AaaaRecord Int String IpV6
   | TxtRecord Int String String
+  | …
 ```
 
---------------------------------------------------------------------------------
+---
 
-```scala
-sealed trait DnsRecord
-case class CnameRecord(...)
-  extends DnsRecord
-case class ARecord(...)
-  extends DnsRecord
-case class AaaaRecord(...)
-  extends DnsRecord
-case class TxtRecord(...)
-  extends DnsRecord
+# Rust
+
+```rust
+enum DnsRecord {
+  CnameRecord(u32, String, String),
+  ARecord(u32, String, IpV4),
+  AaaaRecord(u32, String, IpV6),
+  TxtRecord(u32, String, String),
+  …
+}
 ```
 
---------------------------------------------------------------------------------
+---
 
-# Javascript
+# Let's factor it out
 
-```javascript
-var adt = require('adt');
-var DnsRecord = adt.data({
-  CnameRecord: { ttl: adt.only(Number), ... },
-  ARecord: { ttl: adt.only(Number), ... },
-  AaaaRecord: { ttl: adt.only(Number), ... }
-});
+---
+
 ```
-
---------------------------------------------------------------------------------
-
-## Let's factor it out
-
---------------------------------------------------------------------------------
-
     DnsRecord( ttl, name,
         AValue(ipv4)
       | AaaaValue(ipv6)
       | CnameValue(alias)
       | TxtValue(name)
+```
 
---------------------------------------------------------------------------------
+---
 
-## Distributivity
+```rust
+struct DnsRecord {
+  name: String,
+  ttl: u32,
+  value: DnsRecordValue
+}
 
---------------------------------------------------------------------------------
+enum DnsRecordValue {
+  AValue(Ipv4),
+  AaaaValue(Ipv6),
+  CnameValue(String),
+  TxtValue(String),
+  …
+}
+```
 
-<p style="text-align: center; margin-top: 200px;">
-`(a * b + a * c)`<br>
-`<=>`<br>
-`a * (b + c)`
-</p>
+---
 
---------------------------------------------------------------------------------
+# Distributivity
 
-## Commutativity
+---
 
---------------------------------------------------------------------------------
+# `(a * b + a * c)`<br>`<=>`<br>`a * (b + c)`
 
-<p style="text-align: center; margin-top: 200px;">
-`(a * b) <=> (b * a)`<br>
-`(a + b) <=> (b + a)`
-</p>
+---
 
---------------------------------------------------------------------------------
+# Commutativity
 
-## Identities
+---
 
---------------------------------------------------------------------------------
+# `(a * b) <=> (b * a)`<br>`(a + b) <=> (b + a)`
 
-<p style="text-align: center; margin-top: 200px;">
-`(a * 1) <=> a`<br>
-`(a + 0) <=> a`
-</p>
+---
 
---------------------------------------------------------------------------------
+# Identities
 
-## Unit type
+---
 
---------------------------------------------------------------------------------
+# `(a * 1) <=> a`<br>`(a + 0) <=> a`
 
-## Associativity
+---
 
---------------------------------------------------------------------------------
+# Unit type<br>(aka `()` aka `void`)
 
-<p style="text-align: center; margin-top: 200px;">
-`(a + b) + c <=> a + (b + c)`<br>
-`(a * b) * c <=> a * (b * c)`<br>
-</p>
+---
 
---------------------------------------------------------------------------------
+# `a * 1`
 
-## Functions
+---
 
---------------------------------------------------------------------------------
+# `a + 1`
 
-## `a -> b`
+---
 
---------------------------------------------------------------------------------
+# Void type<br>(aka `!`, but not `void`!)
 
-## `b`<sup>`a`</sup>
+---
 
---------------------------------------------------------------------------------
+# `a + 0`
 
-## `c`<sup>`(a * b)`</sup>
+---
 
---------------------------------------------------------------------------------
+# `a * 0`
 
-## (`c`<sup>`b`</sup>)<sup>`a`</sup>
+---
 
---------------------------------------------------------------------------------
+# Associativity
 
-## `(a, b) -> c`
+---
 
---------------------------------------------------------------------------------
+# <small>`(a + b) + c <=> a + (b + c)`<br>`(a * b) * c <=> a * (b * c)`</small>
 
-## `a -> b -> c`
+---
 
---------------------------------------------------------------------------------
+# `a + b + c`<br>`a * b * c`
 
-## #Currying
+---
 
---------------------------------------------------------------------------------
+# Functions
 
-## Do your homework
+---
 
---------------------------------------------------------------------------------
+# `a -> b`
 
-## #intuition
+---
 
---------------------------------------------------------------------------------
+# `b`<sup>`a`</sup>
 
+---
 
-## Thanks
+# `c`<sup>`(a * b)`</sup>
 
---------------------------------------------------------------------------------
+---
 
-<video src="/home/clement/Images/lol/big_internet_hug.webm" loop></video>
+# `(a, b) -> c`
 
--------------------------------------------
+---
 
-# scalaio2016
+# (`c`<sup>`b`</sup>)<sup>`a`</sup>
 
--------------------------------------------
+---
 
-# Thanks
+# `a -> b -> c`
 
-## <http://cltdl.fr/gifs>
+---
 
--------------------------------------------
+# (`c`<sup>`b`</sup>)<sup>`a`</sup><br>`<=>`<br>`c`<sup>`(a * b)`</sup>
 
-# I'm online!
+---
 
-- [\@clementd](https://twitter.com/clementd) on twitter
-- [cltdl.fr/blog](http://cltdl.fr/blog)
-- [clever cloud](http://clever-cloud.com)
+# `a -> b -> c`<br>`<=>`<br>`(a * b) -> c`
 
+---
+
+# #Currying
+
+---
+
+# Try other algebraic equivalences
+
+---
+
+# #intuition

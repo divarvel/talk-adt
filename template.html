@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+$if(light)$
+<html class="light">
+$else$
+<html>
+$endif$
 <head>
 <meta charset="utf-8">
 $for(author-meta)$
@@ -18,244 +23,47 @@ $for(css)$
   <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
 $endfor$
 $else$
-<link href='http://fonts.googleapis.com/css?family=Raleway:300,400|Source+Sans+Pro:300,400' rel='stylesheet'>
 <style>
-  html { background-color: black; }
-  a { color: #FF0044; } a:hover {text-decoration: underline;}
-  footer { position: absolute; bottom: 50px; right: 50px; }
-  strong,code {color: #fff; }
-  body {
-      font-family: 'Source Sans Pro', arial, sans-serif;
-      background-color: black;
-      color: white;
-      font-size: 30px;
-      background: #232326;
-  }
-
-  .red {
-      color: #cb243c;
-  }
-  .pink {
-    color: #ff2c7e;
-  }
-
-  .before {
-      z-index: 10000;
-      position: absolute;
-      width: 100%;
-      top: 0;
-      color: #fff;
-      text-align: right;
-  }
-  .after {
-      z-index: 10000;
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      text-align: right;
-  }
-
-  .title-slide a {
-    color: white;
-  }
-  .title-slidea:hover {
-    text-decoration: underline;
-  }
-  .title-slide img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-  }
-
-  .title-slide .red {
-      color: #cb243c;
-  }
-
-  .title-slide .title {
-     margin-top: 90px;
-     margin-left: 10px;
-     text-align: left;
-     line-height: 1.4em;
-     color: white;
-     font-weight: 300;
-  }
-
-
-  /* Transition effect */
-  section {
-      /*
-      -moz-transition: left 400ms ease-in 0s;
-      -webkit-transition: left 400ms ease-in 0s;
-      -ms-transition: left 400ms ease-in 0s;
-      transition: left 400ms ease-in 0s;
-      */
-      background: #0B0629;
-      color:white;
+  html, .view body { background-color: black; }
+  .view section .incremental {
+    visibility: visible;
+    opacity: 1;
   }
   section { left: -150%; }
   section[aria-selected] { left: 0; }
   section[aria-selected] ~ section { left: +150% }
-  section img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-  }
 
-  .chapter { background-color: white;}
-  .chapter h1 {line-height: 600px; vertical-align: middle; margin: 0; text-align: center; display: block}
+  /* Incremental elements */
+  /* By default, visible */
+  .incremental > * { opacity: 1; }
+  /* The current item */
+  .incremental > *[aria-selected] { opacity: 1; }
+  /* The items to-be-selected */
+  .incremental > *[aria-selected] ~ * { opacity: 0; }
 
-  h1,h2,h3,h4,h5,h6 {
-      font-family: 'Raleway', arial, serif;
-      font-weight: 300;
-      margin: 30px 100px 0 100px;
-  }
-
-  h1 {
-      margin: 0 auto 0 auto;
-      padding-top: calc(50% - 150px);
-      font-size: 3vw;
-      /*text-shadow: 0px -1px 0px #000;*/
-      text-align: center;
-  }
-  .slide h1 small + .slide figure {color:#000}
-
-
-  h2 {
-      color: #fff;
-      margin-top: 10px;
-      font-size: 2.5vw;
-      text-align: left;
-  }
-  h3,h4,h5,h6 {
-      color: #fff;
-      margin-top: 10px;
-      font-size: 2vw;
-      text-align: left;
-  }
-
-  h1.title {
-      color: #000;
-      font-size: 3vw;
-      position: absolute;
-      top: 50px;
-      left: 90px;
-      padding-top: 0px;
-  }
-
-  .author {
-      margin: 0;
-      font-size: 0.9em;
-      position: absolute;
-      top: -150px;
-      left: -150px;
-  }
-
-  .twitter {
-    text-align: right;
-    font-size: 0.7em;
+  .loading {
+    display: block;
     position: absolute;
-    bottom: -47px;
-    right: -45px;
+    top: 0;
+    right: 0;
+    background-color: red;
   }
 
-  ul {
-      margin-top: 200px;
-      font-size: 60px;
-      text-align: right;
-      border-right: 4px solid white;
-      padding-right: 40px;
-      min-width: 310px;
-      margin-left: 50px;
-      display: inline-block;
-  }
-  q, p {
-      margin-top: 50px;
-      margin-left: 20px;
-      width: 100%;
-      font-size: 1.5em;
-      /*text-align: center;*/
-  }
-  q:after {content: ""}
-  q:before {content: ""}
-  q {
-      display: block;
-      margin-top: 140px;
-  }
-  #arrow {
-      position: absolute;
-      top: 165px;
-      left: 460px;
-      font-size: 100px;
-      color: white;
-
-  }
-  li {list-style-type: none}
-
-  pre {
-      /*font-size: 18px;*/
-      color: white;
-      margin: 2em;
+  body.loaded .loading {
+    display: none;
   }
 
-  .slide h1 {
-      width: 100%;
-      position: absolute;
-      padding: 0;
-      width: 100%;
-      text-align: center;
-      top: 50px;
-      z-index: 1000;
+  $if(ratio43)$
+  $else$
+  /* Force a 16/9 ratio (by default, dzslides uses a 4/3 ratio) */
+  body.loaded {
+    height: 450px;
+    margin-top: -225px;
   }
-
-  .slide h2, .slide h3 {
-      margin: 0;
-      font-size: 3vw;
-      width: 100%;
-      position: absolute;
-      padding: 0;
-      width: 100%;
-      text-align: center;
-      top: 40%;
-      z-index: 1000;
-  }
-
-  .slide h3 {
-      top: 30%;
-  }
-
-  .slide h1+video,
-  .slide video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-  }
-
-  h1+p, h1+pre, .text {
-      position: absolute;
-      bottom: 160px;
-  }
-
-  .bottom {
-    bottom: 50px;
-  }
-
-  .big {
-      font-size: 1.5em;
-  }
-
-  h1+pre {
-    position: absolute;
-    bottom: 10px;
-  }
-
+  $endif$
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 $endif$
 $if(math)$
   $math$
@@ -265,79 +73,281 @@ $for(header-includes)$
 $endfor$
 </head>
 <body>
-<!--<div class="before">
-    <img src="assets/scalaio_medium.png" />
-</div>-->
-<div class="after">
-</div>
+<div class="loading">Loading</div>
+$dzslides-core$
+<style>
+  [role="note"].display {
+    color: var(--primary);
+    background-color: var(--background);
+    opacity: 0.8;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    z-index: 15000;
+  }
+
+  :root {
+    --primary: #FCF6F3;
+    --secondary: #D4B499;
+    --background: #3F5569;
+  }
+
+  :root.light {
+    --primary: #3F5569;
+    --secondary: #889EAF;
+    --background: #FCF6F3;
+  }
+
+  .slide {
+    font-family: "Noto Sans", "sans-serif";
+    /*
+    color: #432c7a;
+    background-color: #fce2db;
+    color: #B73E3E;
+    background-color: #EDDBC0;
+    color: #E14D2A;
+    background-color: #FFF8EA;
+    color: #FFF8EA;
+    background-color: #820000;
+
+    color: #F3D5C0;
+    background-color: #506D84;
+    #D4B499
+    #889EAF
+    color: #FCF6F3;
+    background-color: #3F5569;
+    color: #3F5569;
+    background-color: #FCF6F3;
+    */
+    color: var(--primary);
+    background-color: var(--background);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide:has(.make-alternate) {
+    color: var(--primary);
+    background-color: var(--secondary);
+  }
+
+  /* `:has()` is not supported by firefox yet */
+  .slide.alternate {
+    color: var(--primary);
+    background-color: var(--secondary);
+  }
+
+  /* Display the first slide element on top */
+  .slide>*:first-child {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Center an element if it's alone in the slide */
+  .slide>*:first-child:last-child,
+  /* Center elements coming after the first one */
+  .slide>*:nth-child(n+2),
+  /* Center elements when explicitly asked for */
+  .slide>.centered {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .slide>*:first-child:has(+ [role=note]) {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .slide>*.top{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  ul {
+    text-align: right;
+    margin-left: 2rem;
+    margin-right: auto;
+    list-style-type: none;
+  }
+
+  li {
+    font-size: 1.5rem;
+    min-width: 200px;
+    padding-right: 1em;
+    border-right: 4px solid var(--primary);
+  }
+
+  a {
+    color: var(--primary);
+  }
+
+  a:hover, a:active, a:focus {
+    color: var(--secondary);
+  }
+
+  .sourceCode {
+    font-size: 14px;
+  }
+
+  .jumbogroup {
+    text-align: center;
+  }
+
+  .jumbo {
+    text-transform: uppercase;
+    display: inline-block;
+    transform-origin: 50% 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .bigimage img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /*
+  .sourceCode span.fu, .sourceCode span.kw, .sourceCode span.dv {
+      color: var(--primary);
+  }
+  .sourceCode span.dt, .sourceCode span.st, .sourceCode span.ch {
+      color: var(--primary);
+  }
+  .sourceCode span.ot, .sourceCode span.co, .sourceCode span.op {
+      color: var(--primary);
+  }
+  */
+
+  .title-slide h1 {
+    font-size: 4rem;
+  }
+
+  .title-slide .authors {
+    position: absolute;
+    bottom: 2em;
+    right: 2em;
+  }
+
+  .author-slide h1 {
+    text-align: left;
+    font-size: 3rem;
+  }
+
+  .overlay {
+    font-family: "Noto Sans", "sans-serif";
+    color: var(--primary);
+    z-index: 10000;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+  }
+
+  /* Don't display the overlay on title & author slides */
+  .slide[aria-selected=true]~.overlay {
+    display: none;
+  }
+</style>
 $if(title)$
-<section class="title-slide">
+<section class="slide title-slide">
+  <div>
   <h1 class="title">$title$</h1>
-  <footer>
+  <footer class="authors">
 $for(author)$
-  <div class="author">$author$</div>
+  <div class="author">$author.name$</div>
 $endfor$
-    <div class="twitter"><a href="https://twitter.com/clementd">@clementd</a></div>
   </footer>
+  </div>
 </section>
+$endif$
+$for(author)$
+<section class="slide author-slide">
+  <h1 class="title"><code>$$ whoami</code></h1>
+  <ul>
+    <li>$author.name$</li>
+    $for(author.desc)$
+      <li>$author.desc$</li>
+    $endfor$
+  </ul>
+</section>
+$endfor$
+$if(overlay)$
+<div class="overlay">$overlay$</div>
 $endif$
 $for(include-before)$
 $include-before$
 $endfor$
-<section class="intro-slide">
-    <img src="assets/itAuto.png">
-</section>
-<section class="end-slide">
-    <img src="assets/customers.png">
-</section>
 $body$
-<section class="intro-slide">
-    <img src="assets/itAuto.png">
-</section>
 $for(include-after)$
 $include-after$
 $endfor$
-$dzslides-core$
 
-<style>
-    .title-slide{
-      background-color: #cb243cff;
-      color: white;
+<script>
+  function makeJumbo(slide) {
+    const nodes = slide.querySelectorAll(".jumbo");
+    for(let node of [... nodes]) {
+      node.style.transform = `scale(1);`;
+      const p = node.parentNode;
+      const pw = p.offsetWidth;
+      const w = node.offsetWidth;
+      node.style.transform = `scale($${pw / w})`;
+      p.style.height = (node.getBoundingClientRect().height / 2) + "px";
     }
-    .title-slide img {
-        opacity: 0.3;
-    }
-    .intro-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .intro-slide {
-        background-color: #0B0629;
-    }
-    .end-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .end-slide {
-        background-color: #0B0629;
-    }
+  }
 
-    .yolo {
-        width: 100%;
-        height: 100%;
-    }
+  // When surrounding a list with an incremental marker in markdown,
+  // pandoc adds the .incremental to the ul tag and wraps it in a
+  // naked div tag, which messes up with the CSS, so we remove the
+  // intermediary div
+  const incrementals = document.querySelectorAll("div>.incremental");
+  for(let ul of [... incrementals]) {
+    ul.parentNode.replaceWith(ul);
+  }
 
-    .yolo h2 {
-        background-color: rgba(0,0,0,0);
+  document.querySelectorAll(".slide").forEach((node) => {
+    const obs = new MutationObserver((mutationList) => {
+      for(let m of mutationList) {
+        if(m.attributeName !== "aria-selected") break;
+        makeJumbo(node);
+        obs.disconnect();
+        return;
+      };
+    });
+    obs.observe(node, { attributes: true });
+    let c = [... node.children];
+    if(c.length > 1 && c.at(-1)?.getAttribute("role") === "note") {
+      c.at(-2).classList.add("centered");
     }
-    body.loaded {
-     height: 450px;
-     margin-top: -225px;
-   }
-</style>
+    if (node.querySelector(".make-alternate")) {
+      node.classList.add("alternate");
+    }
+  });
+
+  document.body.addEventListener('keydown', function(e) {
+    if(e.keyCode === 78) { // n
+      e.preventDefault();
+      document.body.querySelectorAll("[role=note]").forEach((n) => {
+        n.classList.toggle("display");
+      });
+    }
+  });
+  $if(display-notes)$
+  document.body.querySelectorAll("[role=note]").forEach((n) => {
+    n.classList.add("display");
+  });
+  $endif$
+
+
+</script>
+
 </body>
 </html>
